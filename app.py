@@ -1,3 +1,4 @@
+import re
 from flask import Flask, render_template
 from flask_socketio import SocketIO, emit
 import assemblyai as aai
@@ -12,7 +13,6 @@ aai.settings.api_key = assemblyai_api_key
 transcriber = None  
 session_id = None  
 transcriber_lock = threading.Lock()  
-import re
 
 # Define categories and their corresponding patterns
 categories = {
@@ -58,22 +58,6 @@ async def analyze_transcript(transcript):
     print("Emitting formatted transcript for:", transcript)
     
     socketio.emit('formatted_transcript', {'text': '\n'.join(classified_result)})
-
-# Existing code...
-from flask import Flask, render_template
-from flask_socketio import SocketIO, emit
-import assemblyai as aai
-import threading
-import asyncio
-from constant import assemblyai_api_key
-
-app = Flask(__name__)
-socketio = SocketIO(app)
-
-aai.settings.api_key = assemblyai_api_key
-transcriber = None  
-session_id = None  
-transcriber_lock = threading.Lock()  
 
 prompt = """You are a medical transcript analyzer. Your task is to detect and format words/phrases that fit into the following five categories:
 
